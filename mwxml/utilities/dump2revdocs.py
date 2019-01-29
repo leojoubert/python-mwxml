@@ -29,7 +29,7 @@ import sys
 import mwcli
 
 from ..iteration import Dump
-
+from hashlib import sha1
 
 def dump2revdocs(dump, verbose=False):
     for page in dump:
@@ -39,6 +39,7 @@ def dump2revdocs(dump, verbose=False):
             sys.stderr.flush()
 
         for revision in page:
+            revision.sha1 = sha1(bytes(revision.text, 'utf8', errors = "replace")).hexdigest()
             yield revision.to_json()
 
             if verbose:
